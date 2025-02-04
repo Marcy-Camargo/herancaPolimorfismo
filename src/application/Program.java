@@ -5,52 +5,60 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import entities.Circle;
-import entities.Rectangle;
-import entities.Shape;
-import entities.enums.Color;
+import entities.Contribuinte;
+import entities.PessoaFisica;
+import entities.PessoaJuridica;
 
 public class Program {
 
 	public static void main(String[] args) {
-
+		
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
 		
-		List<Shape> list = new ArrayList<>();
+		List<Contribuinte> list = new ArrayList<>();
 		
-		System.out.print("Enter the number of shapes: ");
+		System.out.print("Entre com o número de contribuintes: ");
 		int n = sc.nextInt();
-		
-		for (int i=1; i<=n; i++) {
-			System.out.println("Shape #" + i + " data: ");
-			System.out.print("Rectangle or Circle (r/c)? ");
-			char type = sc.next().charAt(0);
-			System.out.print("Color (BLACK/BLUE/RED): ");
-			Color color = Color.valueOf(sc.next());
-			if (type == 'r') {
-				System.out.print("Width: ");
-				double width = sc.nextDouble();
-				System.out.print("Height: ");
-				double heigth = sc.nextDouble();
+		for(int i=1; i<=n; i++) {
+			System.out.println("Dados do " + i + "ª contribuinte: ");
+			System.out.print("Pessoa física ou jurídica (f/j)? ");
+			char tipo = sc.next().charAt(0);			
+			System.out.print("Nome: ");
+			sc.nextLine();
+			String nome = sc.nextLine();
+			System.out.print("Renda anual: ");
+			double rendaAnual = sc.nextDouble();
+			if(tipo == 'f') {
+				System.out.print("Gastos com saúde: ");
+				double gastosSaude = sc.nextDouble();
 				
-				Rectangle rectangle = new Rectangle(color, width, heigth);
-				list.add(rectangle);
+				list.add(new PessoaFisica(nome, rendaAnual, gastosSaude));
 			}
 			else {
-				System.out.printf("Radius: ");
-				double radius = sc.nextDouble();
+				System.out.print("Número de funcionários: ");
+				int funcionarios = sc.nextInt();
 				
-				Circle circle = new Circle(color, radius);
-				list.add(circle);
+				list.add(new PessoaJuridica(nome, rendaAnual, funcionarios));
 			}
-		}
+		}		
 		
 		System.out.println();
-		System.out.println("SHAPE AREAS: ");
-		for(Shape shape : list) {
-			System.out.println(String.format("%.2f", shape.area()));
-		}		
+		System.out.println("IMPOSTOS PAGOS: ");
+		//FOR PRA LER O NOME E TOTAL DE IMPOSTOS PAGOS POR CONTRIBUINTE
+		for(Contribuinte contribuinte : list) {			
+			System.out.println(contribuinte.getName() + ": $ " + String.format("%.2f", contribuinte.imposto()));
+		}
+		
+		
+		System.out.println();
+		double sum = 0.0;
+		//FOR PRA IMPRIMIR O TOTAL DE IMPOSTOS PAGOS POR TODOS OS CONTRIBUINTES
+		for(Contribuinte contribuinte : list) {
+			double imposto = contribuinte.imposto();
+			sum += imposto;
+		}
+		System.out.println("TOTAL DE IMPOSTO PAGO: $" + String.format("%.2f", sum));		
 		
 		sc.close();
 	}
