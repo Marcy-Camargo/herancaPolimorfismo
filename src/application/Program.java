@@ -1,60 +1,57 @@
 package application;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import entities.ImportedProduct;
-import entities.Product;
-import entities.UsedProduct;
+import entities.Circle;
+import entities.Rectangle;
+import entities.Shape;
+import entities.enums.Color;
 
 public class Program {
 
 	public static void main(String[] args) {
-		
+
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
 		
-		List<Product> list = new ArrayList<>();
+		List<Shape> list = new ArrayList<>();
 		
-		System.out.print("Enter the number of products: ");
+		System.out.print("Enter the number of shapes: ");
 		int n = sc.nextInt();
 		
-		for(int i=1; i<=n; i++) {
-			System.out.println("Product #" + i + " data: ");
-			System.out.print("Common, used or imported (c/u/i)? ");
+		for (int i=1; i<=n; i++) {
+			System.out.println("Shape #" + i + " data: ");
+			System.out.print("Rectangle or Circle (r/c)? ");
 			char type = sc.next().charAt(0);
-			System.out.print("Name: ");
-			sc.nextLine();
-			String name = sc.nextLine();
-			System.out.print("Price: ");
-			double price = sc.nextDouble();
-			if (type == 'c') {
-				Product product = new Product(name, price);
-				list.add(product);
-			}
-			else if (type == 'u') {
-				System.out.print("Manufacture date (DD/MM/YYYY): ");
-				LocalDate date = LocalDate.parse(sc.next(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-				UsedProduct usedProduct = new UsedProduct(name, price, date);
-				list.add(usedProduct);
+			System.out.print("Color (BLACK/BLUE/RED): ");
+			Color color = Color.valueOf(sc.next());
+			if (type == 'r') {
+				System.out.print("Width: ");
+				double width = sc.nextDouble();
+				System.out.print("Height: ");
+				double heigth = sc.nextDouble();
+				
+				Rectangle rectangle = new Rectangle(color, width, heigth);
+				list.add(rectangle);
 			}
 			else {
-				System.out.print("Customs Fee: ");
-				double customsFee = sc.nextDouble();
-				ImportedProduct importedProduct = new ImportedProduct(name, price, customsFee);
-				list.add(importedProduct);
+				System.out.printf("Radius: ");
+				double radius = sc.nextDouble();
+				
+				Circle circle = new Circle(color, radius);
+				list.add(circle);
 			}
 		}
-			System.out.println();
-			System.out.println("PRICE TAGS: ");
-			for (Product prod : list) {
-				System.out.println(prod.priceTag());
-			}
-			
+		
+		System.out.println();
+		System.out.println("SHAPE AREAS: ");
+		for(Shape shape : list) {
+			System.out.println(String.format("%.2f", shape.area()));
+		}		
+		
 		sc.close();
 	}
 }
